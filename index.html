@@ -497,15 +497,15 @@ function buildRibHi(){const I=f32(SC.er_inst),M=obj.sh_er.mats[0],pk=ribPick(M),
   for(let r=0;r<3;r++){for(let c=0;c<3;c++)m4[c*4+r]=sc*R3[r][c];m4[12+r]=T0[r]-sc*(R3[r][0]*cL[0]+R3[r][1]*cL[1]+R3[r][2]*cL[2])}
   mats.push(mul(M,m4))}
  obj.er_hi.mats=mats;hiBuilt=true}
-function ribHiUpd(){const want=stage===5&&focKey==='er2'&&cur.d<1.1&&G.er_rib[0].on;if(want&&!hiBuilt)buildRibHi();obj.er_hi.t=want?1:0;const hide=want&&obj.er_hi.a>0.6;for(const p of G.er_rib)p.hide=hide}
+function ribHiUpd(){const want=stage===4&&focKey==='er2'&&cur.d<1.1&&G.er_rib[0].on;if(want&&!hiBuilt)buildRibHi();obj.er_hi.t=want?1:0;const hide=want&&obj.er_hi.a>0.6;for(const p of G.er_rib)p.hide=hide}
 function step(dt,instant){const k=instant?1:1-Math.exp(-dt*3.4);
  let da=tgt.az-cur.az;cur.az+=da*k;cur.el+=(tgt.el-cur.el)*k;cur.d+=(tgt.d-cur.d)*k;for(let i=0;i<3;i++)cur.t[i]+=(tgt.t[i]-cur.t[i])*k;
  const kin=instant?1:1-Math.exp(-dt*3.2),kout=instant?1:1-Math.exp(-dt*9);let outMax=0;for(const o in obj){const q=obj[o];if(q.morph&&q.t<q.a-0.01)outMax=Math.max(outMax,q.a)}const gate=instant?1:Math.max(0,1-outMax/0.3);
  ribHiUpd();for(const o in obj){const q=obj[o];q.a+=(q.t-q.a)*(q.t<q.a?kout:kin*(q.morph?gate:1));if(Math.abs(q.t-q.a)<0.004)q.a=q.t}
- const to=forceOpen!==null?forceOpen:(stage===11&&obj.sh_nuc.a>0.9?1:0);nucOpen=instant?to:nucOpen+(to-nucOpen)*(1-Math.exp(-dt*(to?1.5:6)));if(Math.abs(to-nucOpen)<0.003)nucOpen=to;{const[a,b]=nucMats(nucOpen);obj.sh_nuc.mats[0]=a;obj.sh_nucb.mats[0]=b}}
+ const to=forceOpen!==null?forceOpen:(stage===10&&obj.sh_nuc.a>0.9?1:0);nucOpen=instant?to:nucOpen+(to-nucOpen)*(1-Math.exp(-dt*(to?1.5:6)));if(Math.abs(to-nucOpen)<0.003)nucOpen=to;{const[a,b]=nucMats(nucOpen);obj.sh_nuc.mats[0]=a;obj.sh_nucb.mats[0]=b}}
 let last=performance.now();
 function loop(now){const dt=Math.min(0.1,(now-last)/1000);last=now;
- if(auto&&!dragging&&now/1000-lastDrag>2.5&&(stage<=1||stage===12||stage>=5)&&!(ANNO[sid()]||[]).length&&!(editing&&tool!=='sel')){const sp=stage<=1||stage===12?5:9;tgt.az+=sp*dt}
+ if(auto&&!dragging&&now/1000-lastDrag>2.5&&(stage<=0||stage===11||stage>=4)&&!(ANNO[sid()]||[]).length&&!(editing&&tool!=='sel')){const sp=stage<=1||stage===12?5:9;tgt.az+=sp*dt}
  step(dt,false);renderFrame();{const c=ST[stage].cam,ok=Math.abs(cur.az-c.az)<4&&Math.abs(cur.el-c.el)<4&&Math.abs(cur.d/c.d-1)<0.06;svg.style.opacity=(editing?1:curOp)*(ok?1:0.1)}requestAnimationFrame(loop)}
 document.getElementById('load').remove();
 const hp=new URLSearchParams(location.hash.slice(1)),hm=hp.get('st')!==null;
